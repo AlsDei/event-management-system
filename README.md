@@ -37,3 +37,56 @@ These terms represent the architectural patterns and components required for the
 | **Query** | An object representing a request to retrieve data without changing it. |
 | **Handler** | The specific logic that executes a Command or a Query. |
 | **DTO** | Data Transfer Object used to move data between layers. |
+
+classDiagram
+    class Event {
+        <<Aggregate Root>>
+        +EventID id
+        +String name
+        +DateTime startDate
+        +DateTime endDate
+        +EventStatus status
+        +publish()
+        +cancel()
+    }
+
+    class TicketCategory {
+        <<Entity>>
+        +CategoryID id
+        +String name
+        +Money price
+        +int quota
+        +isActive()
+    }
+
+    class Booking {
+        <<Aggregate Root>>
+        +BookingID id
+        +CustomerID customerId
+        +BookingStatus status
+        +DateTime paymentDeadline
+        +pay()
+        +expire()
+    }
+
+    class Ticket {
+        <<Aggregate Root>>
+        +TicketID id
+        +TicketCode code
+        +TicketStatus status
+        +checkIn()
+    }
+
+    class Refund {
+        <<Aggregate Root>>
+        +RefundID id
+        +RefundStatus status
+        +String rejectionReason
+        +approve()
+    }
+
+    Event "1" *-- "many" TicketCategory : contains
+    Booking "1" --> "1" Event : references
+    Booking "1" --> "1" TicketCategory : references
+    Ticket "many" --o "1" Booking : generated from
+    Refund "1" --o "1" Booking : requested for
