@@ -166,7 +166,31 @@ This setup clearly shows the separation between the **Domain Layer** (Logic) and
 
 ---
 
-## 5. Folder Structure
+## 5. Initial Business Rules
+
+### Event & Ticket Rules
+- **Events** must have valid dates and capacity > 0.
+- **Draft** events can be **Published** if they have active ticket categories and valid quotas.
+- **Published** events can be **Cancelled** (triggering refunds).
+- **Ticket Categories** need a valid price, quota > 0, and sales period ending before the event.
+- Total ticket quota cannot exceed event capacity.
+
+### Booking & Payment Rules
+- **Bookings** require a published event, active category, and valid quantity within remaining quota.
+- Customers can only have 1 active booking per event.
+- Bookings start as **PendingPayment**.
+- If paid exactly within the deadline, status becomes **Paid** and tickets are issued.
+- If unpaid past deadline, status becomes **Expired** and quota is released.
+
+### Check-in & Refund Rules
+- **Check-in** requires an active ticket for the correct event and time. Tickets can only be used once.
+- **Refunds** can be requested for paid, unchecked-in bookings before the deadline (or anytime if event is cancelled).
+- Refunds go through **Requested** -> **Approved** / **Rejected** -> **PaidOut**.
+- Approved refunds cancel related tickets and bookings.
+
+---
+
+## 6. Folder Structure
 
 ```plaintext
 src/
