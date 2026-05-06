@@ -200,28 +200,25 @@ src/
 │   ├── value-objects/         # Money, TicketCode, and Capacity
 │   ├── events/                # Domain Events (EventCreated, BookingPaid, etc.)
 │   ├── repositories/          # Repository Interfaces (IEventRepository, etc.)
+│   ├── factories/             # Contains logic for creating complex Aggregates or Entities
 │   └── services/              # Domain Services for cross-aggregate logic
 │
 ├── application/               # Application Business Rules (Layer 2)
 │   ├── commands/              # Command definitions (intent to change state)
-│   ├── queries/               # Query definitions (request to retrieve data)
-│   ├── handlers/              # Command and Query Handlers
+│   ├── queries/               #Handles read-only operations that retrieve data for the UI without modifying the      │   │                           system state.
 │   ├── dtos/                  # Data Transfer Objects for Application Layer
-│   └── common/                # Interfaces for external services (Payment, etc.)
 │
 ├── infrastructure/            # Frameworks & Drivers (Layer 3)
 │   ├── persistence/           # PostgreSQL Implementation (Prisma/TypeORM)
 │   │   ├── entities/          # Database schemas/models
 │   │   ├── repositories/      # Repository implementations
 │   │   └── migrations/        # PostgreSQL migration files
-│   ├── external-services/     # Implementations for external API clients
-│   └── config/                # Environment and database configurations
+│   ├── services/              # Implementations of the application service interfaces
 │
 ├── presentation/              # Delivery Mechanism (Layer 4)
-│   └── http/  
+│   └── http/                  # The entry point for web-based interactions
 │       ├── controllers/       # NestJS REST API Controllers
-│       ├── dtos/              # Request/Response DTOs for the API layer
-│       └── swagger/           # Documentation configuration
+│       └── modules/           # NestJS-specific wiring that bundles controllers and providers for each feature
 │
 └── test/                      # Mandatory Domain Unit Tests
     └── unit/                  # Unit tests for domain logic and business rules
