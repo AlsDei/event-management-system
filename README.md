@@ -163,3 +163,40 @@ These interfaces define how your Aggregates will be persisted in PostgreSQL.
 | **IRefundRepository** | `save(Refund)`, `findPending()` |
 
 This setup clearly shows the separation between the **Domain Layer** (Logic) and the **Infrastructure Layer** (Database), which is the core of Clean Architecture.
+
+---
+
+## 5. Folder Structure
+
+src/
+├── domain/                    # Enterprise Business Rules (Layer 1)
+│   ├── aggregates/            # Event, Booking, Ticket, and Refund Aggregates
+│   ├── entities/              # Domain Entities with unique identities
+│   ├── value-objects/         # Money, TicketCode, and Capacity
+│   ├── events/                # Domain Events (EventCreated, BookingPaid, etc.)
+│   ├── repositories/          # Repository Interfaces (IEventRepository, etc.)
+│   └── services/              # Domain Services for cross-aggregate logic
+│
+├── application/               # Application Business Rules (Layer 2)
+│   ├── commands/              # Command definitions (intent to change state)
+│   ├── queries/               # Query definitions (request to retrieve data)
+│   ├── handlers/              # Command and Query Handlers
+│   ├── dtos/                  # Data Transfer Objects for Application Layer
+│   └── common/                # Interfaces for external services (Payment, etc.)
+│
+├── infrastructure/            # Frameworks & Drivers (Layer 3)
+│   ├── persistence/           # PostgreSQL Implementation (Prisma/TypeORM)
+│   │   ├── entities/          # Database schemas/models
+│   │   ├── repositories/      # Repository implementations
+│   │   └── migrations/        # PostgreSQL migration files
+│   ├── external-services/     # Implementations for external API clients
+│   └── config/                # Environment and database configurations
+│
+├── presentation/              # Delivery Mechanism (Layer 4)
+│   └── http/  
+│       ├── controllers/       # NestJS REST API Controllers
+│       ├── dtos/              # Request/Response DTOs for the API layer
+│       └── swagger/           # Documentation configuration
+│
+└── test/                      # Mandatory Domain Unit Tests
+    └── unit/                  # Unit tests for domain logic and business rules
