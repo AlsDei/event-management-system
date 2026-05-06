@@ -1,44 +1,44 @@
 ***
 
-## Ubiquitous Language
+# Ubiquitous Language Glossary
 
-The following tables define the shared language used by both the business stakeholders and the development team to ensure consistency across the requirements and the code.
+This document defines the shared language used by both the business stakeholders and the development team[cite: 1]. Adhering to this glossary ensures consistency across the requirements, the domain model, and the implementation code[cite: 1].
 
-### 1. Domain Business Terms
-These terms represent the core concepts of the Event Ticketing & Booking System.
+## 1. Domain Business Terms
+These terms represent the core concepts and real-world entities of the **Event Ticketing & Booking System**[cite: 1].
 
 | Term | Meaning |
 | :--- | :--- |
-| **Event** | An activity organized by an Event Organizer and attended by customers. |
-| **Event Organizer** | A user who creates and manages events, ticket categories, and refunds. |
-| **Customer** | A user who browses events, creates bookings, and purchases tickets. |
-| **Gate Officer** | A user who validates unique ticket codes during event check-in. |
-| **System Admin** | A user responsible for triggering refund payouts and monitoring operations. |
-| **Ticket Category** | A specific type of ticket (e.g., Regular, VIP) with its own price and quota. |
-| **Quota** | The maximum number of tickets available within a specific ticket category. |
-| **Booking** | A temporary reservation of tickets before payment is finalized. |
-| **Ticket** | Official proof of attendance generated only after a booking is successfully paid. |
-| **Ticket Code** | A unique identifier used to validate a ticket at the venue. |
-| **Check-in** | The process of validating a ticket when a participant enters the event. |
-| **Refund** | The process of returning money to a customer for a cancelled or requested booking. |
-| **Money** | A value object representing a specific amount and its currency. |
-| **Sales Period** | The timeframe during which a specific ticket category is available for purchase. |
-| **Payment Deadline** | The time limit (e.g., 15 minutes) to pay for a booking before it expires. |
+| **Event** | An activity organized by an Event Organizer and attended by customers[cite: 1]. |
+| **Event Organizer** | A user who creates and manages events, ticket categories, and refunds[cite: 1]. |
+| **Customer** | A user who browses events, creates bookings, and purchases tickets[cite: 1]. |
+| **Gate Officer** | A user who validates unique ticket codes during event check-in[cite: 1]. |
+| **System Admin** | A user responsible for triggering refund payouts and monitoring operations[cite: 1]. |
+| **Ticket Category** | A specific type of ticket (e.g., Regular, VIP) with its own price and quota[cite: 1]. |
+| **Quota** | The maximum number of tickets available within a specific ticket category[cite: 1]. |
+| **Booking** | A temporary reservation of tickets before payment is finalized[cite: 1]. |
+| **Ticket** | Official proof of attendance generated only after a booking is successfully paid[cite: 1]. |
+| **Ticket Code** | A unique identifier used to validate a ticket at the venue[cite: 1]. |
+| **Check-in** | The process of validating a ticket when a participant enters the event[cite: 1]. |
+| **Refund** | The process of returning money to a customer for a cancelled or requested booking[cite: 1]. |
+| **Money** | A value object representing a specific amount and its currency[cite: 1]. |
+| **Sales Period** | The timeframe during which a specific ticket category is available for purchase[cite: 1]. |
+| **Payment Deadline** | The time limit (e.g., 15 minutes) to pay for a booking before it expires[cite: 1]. |
 
-### 2. Technical & Architectural Terms (DDD)
-These terms represent the "language of the programming" and architecture used to implement the system.
+## 2. Technical & Architectural Terms (DDD)
+These terms represent the architectural patterns and components required for the **Clean Architecture** and **Domain-Driven Design** implementation[cite: 1].
 
 | Term | Meaning in Implementation |
 | :--- | :--- |
-| **Aggregate** | A cluster of domain objects (Entities/Value Objects) treated as a single unit for data changes. |
-| **Entity** | A domain object with a unique identity that persists over time (e.g., an `Event` ID). |
-| **Value Object** | An object defined only by its attributes with no unique identity (e.g., `Money`). |
-| **Domain Event** | A notification of a significant change or occurrence within the domain logic. |
-| **Repository** | An interface for persisting and retrieving Aggregates from the database. |
-| **Domain Service** | Business logic that doesn't naturally belong inside a single Entity or Aggregate. |
-| **Command** | An object representing an intent to change the state of the system. |
-| **Query** | An object representing a request to retrieve data without changing it. |
-| **Handler** | The specific logic that executes a Command or a Query. |
-| **DTO** | Data Transfer Object used to move data between the API and Application layers. |
+| **Aggregate** | A cluster of domain objects treated as a single unit for data changes[cite: 1]. |
+| **Entity** | A domain object with a unique identity that persists over time[cite: 1]. |
+| **Value Object** | An object defined only by its attributes with no unique identity (e.g., `Money`)[cite: 1]. |
+| **Domain Event** | A notification of a significant change within the domain logic[cite: 1]. |
+| **Repository** | An interface for persisting and retrieving Aggregates from the database[cite: 1]. |
+| **Domain Service** | Business logic that doesn't naturally belong inside a single Entity or Aggregate[cite: 1]. |
+| **Command** | An object representing an intent to change the state of the system[cite: 1]. |
+| **Query** | An object representing a request to retrieve data without changing it[cite: 1]. |
+| **Handler** | The specific logic that executes a Command or a Query[cite: 1]. |
+| **DTO** | Data Transfer Object used to move data between layers[cite: 1]. |
 
 ***
