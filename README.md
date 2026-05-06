@@ -168,6 +168,7 @@ This setup clearly shows the separation between the **Domain Layer** (Logic) and
 
 ## 5. Folder Structure
 
+```plaintext
 src/
 ├── domain/                    # Enterprise Business Rules (Layer 1)
 │   ├── aggregates/            # Event, Booking, Ticket, and Refund Aggregates
@@ -200,3 +201,4 @@ src/
 │
 └── test/                      # Mandatory Domain Unit Tests
     └── unit/                  # Unit tests for domain logic and business rules
+```
