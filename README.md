@@ -1,40 +1,54 @@
+# Project Structural
 
-***
-
-# Event Management System: Domain and Architectural Specification
-
-This project implements an Event Ticketing & Booking System using **Clean Architecture** and **Domain-Driven Design (DDD)** tactical patterns[cite: 1]. The primary goal is to maintain a high degree of maintainability and testability by decoupling the core business logic from external infrastructure[cite: 1].
+This document defines the shared language used by both the business stakeholders and the development team. Adhering to this glossary ensures consistency across the requirements, the domain model, and the implementation code.
 
 ---
 
-## 1. Ubiquitous Language Glossary
+## 1. Domain Business Terms
 
-This glossary defines the shared language used to ensure consistency between the business requirements and the technical implementation[cite: 1].
+These terms represent the core concepts and real-world entities of the **Event Ticketing & Booking System**.
 
-### Domain Business Terms
-| Term | Description |
+| Term | Meaning |
 | :--- | :--- |
-| **Event** | A planned activity managed by an Organizer and attended by Customers[cite: 1]. |
-| **Booking** | A temporary reservation of tickets pending successful payment[cite: 1]. |
-| **Ticket Category** | Distinct ticket types (e.g., VIP, Regular) with specific pricing and quotas[cite: 1]. |
-| **Quota** | The maximum allowable ticket sales for a specific category[cite: 1]. |
-| **Check-in** | The process of validating a Ticket Code at the event venue[cite: 1]. |
-| **Money** | A value object representing a numeric amount and its associated currency[cite: 1]. |
-| **Payment Deadline** | The expiration window (e.g., 15 minutes) for a pending booking[cite: 1]. |
-
-### Technical & Architectural Terms
-| Term | Implementation Meaning |
-| :--- | :--- |
-| **Aggregate** | A cluster of domain objects treated as a single unit for data consistency[cite: 1]. |
-| **Domain Event** | An asynchronous notification of a significant state change (e.g., `EventPublished`)[cite: 1]. |
-| **Repository** | An interface defining how Aggregates are persisted to the PostgreSQL database[cite: 1]. |
-| **Command/Query** | Patterns used to separate the intent to change state from the request to read data[cite: 1]. |
+| **Event** | An activity organized by an Event Organizer and attended by customers. |
+| **Event Organizer** | A user who creates and manages events, ticket categories, and refunds. |
+| **Customer** | A user who browses events, creates bookings, and purchases tickets. |
+| **Gate Officer** | A user who validates unique ticket codes during event check-in. |
+| **System Admin** | A user responsible for triggering refund payouts and monitoring operations. |
+| **Ticket Category** | A specific type of ticket (e.g., Regular, VIP) with its own price and quota. |
+| **Quota** | The maximum number of tickets available within a specific ticket category. |
+| **Booking** | A temporary reservation of tickets before payment is finalized. |
+| **Ticket** | Official proof of attendance generated only after a booking is successfully paid. |
+| **Ticket Code** | A unique identifier used to validate a ticket at the venue. |
+| **Check-in** | The process of validating a ticket when a participant enters the event. |
+| **Refund** | The process of returning money to a customer for a cancelled or requested booking. |
+| **Sales Period** | The timeframe during which a specific ticket category is available for purchase. |
+| **Payment Deadline** | The time limit (e.g., 15 minutes) to pay for a booking before it expires. |
 
 ---
 
-## 2. Initial Domain Model Draft
+## 2. Technical & Architectural Terms (DDD)
 
-The following diagram illustrates the relationships between the identified Aggregate Roots, Entities, and Value Objects[cite: 1].
+These terms represent the architectural patterns and components required for the **Clean Architecture** and **Domain-Driven Design** implementation.
+
+| Term | Meaning in Implementation |
+| :--- | :--- |
+| **Aggregate** | A cluster of domain objects treated as a single unit for data changes. |
+| **Entity** | A domain object with a unique identity that persists over time. |
+| **Value Object** | An object defined only by its attributes with no unique identity (e.g., `Money`). |
+| **Domain Event** | A notification of a significant change within the domain logic. |
+| **Repository** | An interface for persisting and retrieving Aggregates from the database. |
+| **Domain Service** | Business logic that doesn't naturally belong inside a single Entity or Aggregate. |
+| **Command** | An object representing an intent to change the state of the system. |
+| **Query** | An object representing a request to retrieve data without changing it. |
+| **Handler** | The specific logic that executes a Command or a Query. |
+| **DTO** | Data Transfer Object used to move data between layers. |
+
+---
+
+## 3. Domain Model
+
+### Class Diagram
 
 ```mermaid
 classDiagram
@@ -93,44 +107,59 @@ classDiagram
 
 ---
 
-## 3. Structural Breakdown
+### Structural Breakdown
 
-### A. Aggregates and Entities
-*   **Event Aggregate**[cite: 1]:
-    *   **Root Entity**: `Event`[cite: 1].
-    *   **Internal Entity**: `TicketCategory`[cite: 1].
-    *   **States**: `Draft`, `Published`, `Cancelled`, `Completed`[cite: 1].
-*   **Booking Aggregate**[cite: 1]:
-    *   **Root Entity**: `Booking`[cite: 1].
-    *   **Responsibility**: Encapsulates the logic for price calculation and the payment lifecycle[cite: 1].
-*   **Ticket Aggregate**[cite: 1]:
-    *   **Root Entity**: `Ticket`[cite: 1].
-    *   **Responsibility**: Manages unique ticket codes and entry validation[cite: 1].
-*   **Refund Aggregate**[cite: 1]:
-    *   **Root Entity**: `Refund`[cite: 1].
-    *   **Responsibility**: Manages the approval/rejection lifecycle for customer refund requests[cite: 1].
+This list provides the descriptive detail your lecturers will look for to ensure you understand DDD Tactical Patterns.
 
-### B. Value Objects
-*   **Money**: Ensures consistent currency handling and prevents precision errors[cite: 1].
-*   **TicketCode**: A unique, validated identifier for event entry[cite: 1].
-*   **Capacity**: Validates that ticket quotas do not exceed total venue limits[cite: 1].
+#### A. Aggregates & Entities
 
-### C. Domain Events
-Domain events facilitate decoupling by allowing the system to react to changes without direct dependencies[cite: 1]:
-*   `EventPublished`: Triggered when an event moves from Draft to Published[cite: 1].
-*   `TicketReserved`: Raised upon initial booking creation[cite: 1].
-*   `BookingPaid`: Triggers the generation of unique tickets[cite: 1].
-*   `BookingExpired`: Releases reserved quota back to the ticket category[cite: 1].
+**Event Aggregate**
+- Root Entity: `Event`
+- Internal Entity: `TicketCategory` (Managed by the Event Organizer)
+- State: `Draft`, `Published`, `Cancelled`, `Completed`
+
+**Booking Aggregate**
+- Root Entity: `Booking`
+- Responsibility: Manages the reservation lifecycle and total price calculation
+- State: `PendingPayment`, `Paid`, `Expired`, `Refunded`
+
+**Ticket Aggregate**
+- Root Entity: `Ticket`
+- Responsibility: Used by the Gate Officer for entry validation
+
+**Refund Aggregate**
+- Root Entity: `Refund`
+- Responsibility: Tracks the lifecycle of a refund request from Customer to Admin
+
+#### B. Value Objects
+
+| Value Object | Description |
+| :--- | :--- |
+| **Money** | Encapsulates `amount` (decimal) and `currency` (string) to prevent logic errors in calculations. |
+| **TicketCode** | A unique string value used for validation. |
+| **Capacity** | Represents the total allowed attendees for an Event. |
+
+#### C. Domain Events
+
+These represent significant changes in state that trigger side effects (like sending notifications or updating quotas).
+
+| Aggregate | Domain Events |
+| :--- | :--- |
+| Event | `EventCreated`, `EventPublished`, `EventCancelled` |
+| Booking | `TicketReserved` *(raised when a Booking is created)*, `BookingPaid`, `BookingExpired` |
+| Ticket | `TicketCheckedIn` |
+| Refund | `RefundRequested`, `RefundApproved`, `RefundPaidOut` |
 
 ---
 
-## 4. Repository Interfaces
-These interfaces reside in the Domain/Application layer and are implemented in the Infrastructure layer using PostgreSQL[cite: 1].
+## 4. Repository Interfaces (Infrastructure Layer Definition)
 
-*   `IEventRepository`: Persistence for event and ticket category data[cite: 1].
-*   `IBookingRepository`: Management of customer bookings and payment status[cite: 1].
-*   `IRefundRepository`: Tracking and processing of refund requests[cite: 1].
+These interfaces define how your Aggregates will be persisted in PostgreSQL.
 
-***
+| Interface | Methods |
+| :--- | :--- |
+| **IEventRepository** | `save(Event)`, `findById(EventID)` |
+| **IBookingRepository** | `save(Booking)`, `findActiveByCustomer(CustomerID)` |
+| **IRefundRepository** | `save(Refund)`, `findPending()` |
 
-To complete your Week 8 deliverables, would you like to draft the **Initial Business Rules** based on the acceptance criteria found in the project documentation?[cite: 1]
+This setup clearly shows the separation between the **Domain Layer** (Logic) and the **Infrastructure Layer** (Database), which is the core of Clean Architecture.
