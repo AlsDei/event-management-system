@@ -19,7 +19,6 @@ These terms represent the core concepts and real-world entities of the **Event T
 | **Ticket Code** | A unique identifier used to validate a ticket at the venue. |
 | **Check-in** | The process of validating a ticket when a participant enters the event. |
 | **Refund** | The process of returning money to a customer for a cancelled or requested booking. |
-| **Money** | A value object representing a specific amount and its currency. |
 | **Sales Period** | The timeframe during which a specific ticket category is available for purchase. |
 | **Payment Deadline** | The time limit (e.g., 15 minutes) to pay for a booking before it expires. |
 
