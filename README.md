@@ -38,6 +38,7 @@ These terms represent the architectural patterns and components required for the
 | **Handler** | The specific logic that executes a Command or a Query. |
 | **DTO** | Data Transfer Object used to move data between layers. |
 
+```mermaid
 classDiagram
     class Event {
         <<Aggregate Root>>
@@ -90,3 +91,4 @@ classDiagram
     Booking "1" --> "1" TicketCategory : references
     Ticket "many" --o "1" Booking : generated from
     Refund "1" --o "1" Booking : requested for
+```
