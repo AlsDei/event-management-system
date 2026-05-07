@@ -29,8 +29,6 @@ These terms represent the core concepts and real-world entities of the **Event T
 
 ## 2. Technical & Architectural Terms (DDD)
 
-These terms represent the architectural patterns and components required for the **Clean Architecture** and **Domain-Driven Design** implementation.
-
 | Term | Meaning in Implementation |
 | :--- | :--- |
 | **Aggregate** | A cluster of domain objects treated as a single unit for data changes. |
@@ -109,8 +107,6 @@ classDiagram
 
 ### Structural Breakdown
 
-This list provides the descriptive detail your lecturers will look for to ensure you understand DDD Tactical Patterns.
-
 #### A. Aggregates & Entities
 
 **Event Aggregate**
@@ -154,7 +150,7 @@ These represent significant changes in state that trigger side effects (like sen
 
 ## 4. Repository Interfaces (Infrastructure Layer Definition)
 
-These interfaces define how your Aggregates will be persisted in PostgreSQL.
+These interfaces define how the Aggregates will be persisted in PostgreSQL.
 
 | Interface | Methods |
 | :--- | :--- |
