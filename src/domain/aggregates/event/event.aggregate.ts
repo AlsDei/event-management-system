@@ -21,13 +21,13 @@ export class Event {
     private domainEvents: any[] = [];
 
     constructor(
-        id: string,
         name: string,
         description: string,
         startDate: Date,
         endDate: Date,
         location: string,
         maxCapacity: number,
+        id: string,
 
     ) {
         this.id = new EventId(id);

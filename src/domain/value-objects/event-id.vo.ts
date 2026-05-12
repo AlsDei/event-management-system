@@ -1,8 +1,23 @@
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
+
 export class EventId {
-    constructor(private readonly value: string) {
-        if (!value || value.length < 5) {
-            throw new Error("Invalid Event ID format.");
+    private readonly value: string;
+
+    constructor(value?: string) {
+        const id = value || uuidv4();
+
+        if (!uuidValidate(id)) {
+            throw new Error("Invalid UUID format for EventId.");
         }
+
+        this.value = id;
     }
-    getValue(): string { return this.value; }
+
+    getValue(): string {
+        return this.value;
+    }
+
+    equals(other: EventId): boolean {
+        return this.value === other.getValue();
+    }
 }
