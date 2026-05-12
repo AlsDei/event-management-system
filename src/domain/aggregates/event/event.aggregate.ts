@@ -51,7 +51,7 @@ export class Event {
         this._ticketCategories.push(category);
 
         const currentTotalQuota = this._ticketCategories.reduce(
-            (sum, cat) => sum + cat.quota.total, 
+            (sum, cat) => sum + cat.quota.total,
             0
         );
 
@@ -59,7 +59,7 @@ export class Event {
             throw new Error("Total ticket quota exceeds maximum event capacity.");
         }
     }
-    
+
 
     getId(): string { return this.id.getValue(); }
     getStatus(): EventStatus { return this.status; }
