@@ -1,5 +1,7 @@
 import { Capacity } from "../../value-objects/capacity.vo";
 import { EventCreated } from "../../events/event-created.event";
+import { EventId } from '../../value-objects/event-id.vo';
+import { EventSchedule } from '../../value-objects/event-schedule.vo';
 
 export enum EventStatus {
     Draft = 'Draft',
@@ -9,11 +11,10 @@ export enum EventStatus {
 }
 
 export class Event {
-    private id: string;
+    private id: EventId;
     private name: string;
     private description: string;
-    private startDate: Date;
-    private endDate: Date;
+    private schedule: EventSchedule;
     private location: string;
     private maxCapacity: Capacity;
     private status: EventStatus;
@@ -29,15 +30,10 @@ export class Event {
         maxCapacity: number,
 
     ) {
-        if (endDate < startDate) {
-            throw new Error("End date must be after start date");
-        }
-
-        this.id = id;
+        this.id = new EventId(id);
         this.name = name;
         this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.schedule = new EventSchedule(startDate, endDate);
         this.location = location;
         this.maxCapacity = new Capacity(maxCapacity);
         this.status = EventStatus.Draft;
@@ -45,7 +41,7 @@ export class Event {
         this.domainEvents.push(new EventCreated(id, name, new Date()));
     }
 
-    getId(): string { return this.id; }
+    getId(): string { return this.id.getValue(); }
     getStatus(): EventStatus { return this.status; }
     getEvents() { return this.domainEvents; }
 }
