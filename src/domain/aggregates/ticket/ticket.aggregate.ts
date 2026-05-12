@@ -1,5 +1,6 @@
 import { TicketCode } from '../../value-objects/ticket-id.vo';
 import { TicketCheckedIn } from '../../events/ticket-checked-in.event';
+import { EventId } from '../../value-objects/event-id.vo';
 
 export enum TicketStatus {
     Active = 'Active',
@@ -11,11 +12,11 @@ export class Ticket {
     private id: string;
     private ticketCode: TicketCode;
     private bookingId: string;
-    private eventId: string;
+    private eventId: EventId;
     private status: TicketStatus;
     private domainEvents: any[] = [];
 
-    constructor(id: string, code: string, bookingId: string, eventId: string) {
+    constructor(id: string, code: string, bookingId: string, eventId: EventId) {
         this.id = id;
         this.ticketCode = new TicketCode(code);
         this.bookingId = bookingId;
@@ -24,9 +25,9 @@ export class Ticket {
     }
 
     // Acceptance Criteria for US 13: Check In Logic [4]
-    public checkIn(targetEventId: string): void {
+    public checkIn(targetEventId: EventId): void {
         // 1. Must match the event
-        if (this.eventId !== targetEventId) {
+        if (!this.eventId.equals(targetEventId)) {
             throw new Error("This ticket does not match the event.");
         }
 
