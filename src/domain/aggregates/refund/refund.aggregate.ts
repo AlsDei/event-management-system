@@ -2,6 +2,9 @@ import { RefundId } from '../../value-objects/refund-id.vo';
 import { Money } from '../../value-objects/money.vo';
 import { RejectionReason } from '../../value-objects/rejection-reason.vo';
 import { RefundRequested } from '../../events/refund-requested.event';
+import { RefundApproved } from "../../events/refund-approved.event";
+import { RefundRejected } from "../../events/refund-rejected.event";
+import { RefundPaidOut } from "../../events/refund-paid-out.event";
 
 export enum RefundStatus {
     Requested = 'Requested',
@@ -32,22 +35,26 @@ export class Refund {
         ));
     }
 
-    // Business Logic: US 16 - Approve Refund
     public approve(): void {
         if (this.status !== RefundStatus.Requested) {
-            throw new Error("Refund cannot be approved if it is not in Requested status.");
+            throw new Error("Refund cannot be approved if not in Requested status.");[8]
         }
         this.status = RefundStatus.Approved;
+        this.domainEvents.push(new RefundApproved(this.id.getValue(), this.bookingId, new Date()));[6, 8]
     }
 
-    // Business Logic: US 17 - Reject Refund
     public reject(reason: string): void {
-        if (this.status !== RefundStatus.Requested) {
-            throw new Error("Only requested refunds can be rejected.");
-        }
-        // Encapsulating the rule: "A rejection reason must be provided"
-        this.rejectionReason = new RejectionReason(reason);
+        this.rejectionReason = new RejectionReason(reason);[9]
         this.status = RefundStatus.Rejected;
+        this.domainEvents.push(new RefundRejected(this.id.getValue(), reason, new Date()));[6, 9]
+    }
+
+    public markAsPaidOut(paymentReference: string): void {
+        if (this.status !== RefundStatus.Approved) {
+            throw new Error("Only approved refunds can be marked as paid out.");[10]
+        }
+        this.status = RefundStatus.PaidOut;
+        this.domainEvents.push(new RefundPaidOut(this.id.getValue(), paymentReference, new Date()));[6, 10]
     }
 
     // Getters
