@@ -1,4 +1,4 @@
-import { PriceCategory } from '../value-objects/price-category.vo.';
+import { PriceCategory } from '../value-objects/price-category.vo';
 import { Quota } from '../value-objects/quota.vo';
 import { SalesPeriod } from '../value-objects/salesperiod.vo';
 

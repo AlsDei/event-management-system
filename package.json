@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "This document defines the shared language used by both the business stakeholders and the development team. Adhering to this glossary ensures consistency across the requirements, the domain model, and the implementation code.",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+"scripts": {
+  "test": "jest",
+  "test:watch": "jest --watch",
+  "test:coverage": "jest --coverage"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AlsDei/event-management-system.git"
@@ -22,7 +24,10 @@
     "@nestjs/cqrs": "^11.0.3",
     "uuid": "^14.0.0"
   },
-  "devDependencies": {
-    "@types/uuid": "^10.0.0"
-  }
+"devDependencies": {
+  "@types/jest": "^29.0.0",
+  "@types/uuid": "^10.0.0",
+  "jest": "^29.0.0",
+  "ts-jest": "^29.0.0"
+}
 }
