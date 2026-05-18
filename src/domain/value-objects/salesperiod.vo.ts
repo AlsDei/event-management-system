@@ -1,4 +1,4 @@
-import { EventSchedule } from "../value-objects/event-schedule.vo";
+import { EventSchedule } from "./event-schedule.vo";
 
 export class SalesPeriod {
     constructor(private readonly salesSchedule: EventSchedule) {}

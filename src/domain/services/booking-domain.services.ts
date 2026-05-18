@@ -11,7 +11,7 @@ export class BookingDomainService {
             eventId.getValue()
         );
         
-        // Implementation for checking if a customer can book an event
+        //checking if a customer can book an event
         return activeBookings.length === 0; // Return true if no existing booking found
     }
 
