@@ -6,4 +6,5 @@ export interface ITicketRepository {
 
     //US 13 & 14: Gate officers must validate a ticket using its unique code.
     findByCode(code: string): Promise<Ticket | null>;
+    findByBookingId(bookingId: string): Promise<Ticket[]>;
 }

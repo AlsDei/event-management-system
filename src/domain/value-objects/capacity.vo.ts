@@ -3,7 +3,7 @@ export class Capacity {
 
     constructor(value: number) {
         if (value <= 0) {
-            throw new Error("Maximum capacity must be greater than 0");
+            throw new Error("Capacity must be greater than 0");
         }
         this.value = value;
     }

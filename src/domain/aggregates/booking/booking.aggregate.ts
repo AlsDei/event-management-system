@@ -48,7 +48,13 @@ export class Booking {
         // Acceptance Criteria US 8: 15-minute payment deadline
         this.paymentDeadline = new Date(Date.now() + 15 * 60 * 1000);
 
+
+
         this.domainEvents.push(new TicketReserved(this.id.getValue(), this.eventId, new Date(), this.ticketCategoryId, this.quantity));
+    }
+
+    public getQuantity(): number {
+        return this.quantity;
     }
 
     // Business Logic: US 10 - Pay Booking 

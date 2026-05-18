@@ -46,6 +46,7 @@ export class Event {
         this.status = EventStatus.Draft;
         this.organizer = organizer;
 
+
         this.domainEvents.push(new EventCreated(id, name, new Date()));
     }
 

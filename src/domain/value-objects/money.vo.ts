@@ -5,7 +5,7 @@ export class Money {
     ) {
         // Acceptance Criteria: Price cannot be less than zero 
         if (amount < 0) {
-            throw new Error("Money amount cannot be negative.");
+            throw new Error("This must be greater than 0");
         }
     }
 

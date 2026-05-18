@@ -23,30 +23,30 @@ describe('TicketCategory Entity', () => {
         expect(() => {
             // Attempting to create a Money VO with a negative amount
             const negativeMoney = new Money(-1000, 'IDR');
-            
+
             // This PriceCategory VO should throw the error before 
             // the TicketCategory is even constructed.
             const negativePrice = new PriceCategory(negativeMoney);
 
             new TicketCategory(
-                'cat-123',
                 validName,
                 negativePrice,
                 validQuota,
-                validSalesPeriod
+                validSalesPeriod,
+                'cat-123',
             );
-        }).toThrow("Price amount must be greater than or equal to 0.");
+        }).toThrow("This must be greater than 0");
     });
 
     it('should successfully create a TicketCategory with a valid price and quota', () => {
         const validPrice = new PriceCategory(new Money(50000, 'IDR'));
-        
+
         const category = new TicketCategory(
-            'cat-123',
             validName,
             validPrice,
             validQuota,
-            validSalesPeriod
+            validSalesPeriod,
+            'cat-123',
         );
 
         expect(category.name).toBe(validName);

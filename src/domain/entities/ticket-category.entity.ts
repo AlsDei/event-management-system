@@ -7,11 +7,11 @@ export class TicketCategory {
   private _active: boolean = true;
 
   constructor(
-    public readonly id: string,
     public readonly name: string,
     public readonly price: PriceCategory,
     public readonly quota: Quota,
     public readonly salesSchedule: SalesPeriod,
+    public readonly id: string,
   ) { }
   public disable(): void {
     // Business Rule: A ticket category can be disabled if event not completed [5]

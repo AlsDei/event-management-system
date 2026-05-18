@@ -3,7 +3,7 @@ import { CustomerID } from '../value-objects/customer-id.vo';
 import { EventId } from '../value-objects/event-id.vo';
 
 export class BookingEligibilityService {
-    constructor(private bookingRepository: IBookingRepository) {}
+    constructor(private bookingRepository: IBookingRepository) { }
 
     async canCustomerBook(customerId: CustomerID, eventId: EventId): Promise<boolean> {
         const activeBookings = await this.bookingRepository.findActiveByCustomer(

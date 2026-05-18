@@ -9,15 +9,13 @@ export enum TicketStatus {
 }
 
 export class Ticket {
-    private id: string;
     private ticketCode: TicketCode;
     private bookingId: string;
     private eventId: EventId;
     private status: TicketStatus;
     private domainEvents: any[] = [];
 
-    constructor(id: string, code: string, bookingId: string, eventId: EventId) {
-        this.id = id;
+    constructor(code: string, bookingId: string, eventId: EventId) {
         this.ticketCode = new TicketCode(code);
         this.bookingId = bookingId;
         this.eventId = eventId;
@@ -43,11 +41,10 @@ export class Ticket {
 
         // Update status and raise event
         this.status = TicketStatus.CheckedIn;
-        this.domainEvents.push(new TicketCheckedIn(this.id, this.ticketCode.getValue(), new Date()));
+        this.domainEvents.push(new TicketCheckedIn(this.bookingId, this.ticketCode.getValue(), new Date()));
     }
 
     // Getters
-    getId(): string { return this.id; }
     getStatus(): TicketStatus { return this.status; }
     getCode(): string { return this.ticketCode.getValue(); }
     getEvents() { return this.domainEvents; }
