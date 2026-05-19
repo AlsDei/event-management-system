@@ -48,4 +48,7 @@ export class Ticket {
     getStatus(): TicketStatus { return this.status; }
     getCode(): string { return this.ticketCode.getValue(); }
     getEvents() { return this.domainEvents; }
+    cancel(): void {
+        this.status = TicketStatus.Cancelled;
+    }
 }

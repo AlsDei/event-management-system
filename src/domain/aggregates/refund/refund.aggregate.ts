@@ -61,4 +61,6 @@ export class Refund {
     getId(): string { return this.id.getValue(); }
     getStatus(): RefundStatus { return this.status; }
     getRejectionReason(): string | undefined { return this.rejectionReason?.getValue(); }
+    public getBookingId(): string { return this.bookingId; }
+    public getAmount(): Money { return this.amount; }
 }

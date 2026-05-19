@@ -85,6 +85,7 @@ export interface PurchasedTicketDto {
 }
 
 export interface PurchasedTicketsResponse {
+  customerId: string;
   tickets: PurchasedTicketDto[];
 }
 

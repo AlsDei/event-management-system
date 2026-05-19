@@ -91,4 +91,9 @@ export class Booking {
     getStatus(): BookingStatus { return this.status; }
     getTotalPrice(): Money { return this.totalPrice; }
     getEvents() { return this.domainEvents; }
+    getPaymentDeadline(): Date { return this.paymentDeadline; }
+    getEventId(): string { return this.eventId; }
+    markAsRefunded(): void {
+        this.status = BookingStatus.Refunded;
+    }
 }
