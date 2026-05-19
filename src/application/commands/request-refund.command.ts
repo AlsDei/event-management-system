@@ -22,7 +22,6 @@ export class RequestRefundCommandHandler {
             throw new Error("Only paid bookings can be refunded.");
         }
 
-        // Fetch all tickets for this booking to ensure none are checked in
         const tickets = await this.ticketRepository.findByBookingId(command.bookingId);
         const hasCheckedInTickets = tickets.some(t => t.getStatus() === 'CheckedIn');
 
@@ -30,7 +29,6 @@ export class RequestRefundCommandHandler {
             throw new Error("Cannot request a refund because one or more tickets have already been checked in.");
         }
 
-        // Instantiate the Refund aggregate using the total price from the booking
         const refund = new Refund(command.bookingId, booking.getTotalPrice());
 
         await this.refundRepository.save(refund);
