@@ -84,7 +84,15 @@ export class Event {
     }
 
     getId(): string { return this.id.getValue(); }
+    getName(): string { return this.name; }
+    getDescription(): string { return this.description; }
+    getSchedule(): EventSchedule { return this.schedule; }
+    getLocation(): string { return this.location; }
+    getOrganizer(): string { return this.organizer; }
+    getMaxCapacity(): number { return this.maxCapacity.Value; }
     getStatus(): EventStatus { return this.status; }
+    getTicketCategories(): TicketCategory[] { return [...this.ticketCategories]; }
     getEvents() { return this.domainEvents; }
 
 }
+

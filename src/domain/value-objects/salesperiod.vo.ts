@@ -7,6 +7,10 @@ export class SalesPeriod {
         return this.salesSchedule.getEnd() <= eventStartDate;
     }
 
+    getStart(): Date {
+        return this.salesSchedule.getStart();
+    }
+
     getEnd(): Date {
         return this.salesSchedule.getEnd();
     }
