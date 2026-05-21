@@ -7,6 +7,9 @@ describe('ExpireBookingsCommandHandler', () => {
 
     const fakeExpiredBooking = (id: string) => ({
         getId: () => id,
+        getEventId: () => 'event-1',
+        getTicketCategoryId: () => 'cat-1',
+        getQuantity: () => 2,
         expire: jest.fn(),
     });
 
@@ -16,7 +19,18 @@ describe('ExpireBookingsCommandHandler', () => {
             save: jest.fn(),
         };
 
-        handler = new ExpireBookingsCommandHandler(mockBookingRepository);
+        const mockEventRepository = {
+            findById: jest.fn().mockResolvedValue({
+                getTicketCategories: () => [{
+                    id: 'cat-1',
+                    releaseTickets: jest.fn(),
+                }],
+            }),
+            save: jest.fn(),
+            findAllPublished: jest.fn(),
+        };
+
+        handler = new ExpireBookingsCommandHandler(mockBookingRepository, mockEventRepository);
     });
 
     it('should return 0 when no expired bookings are found', async () => {

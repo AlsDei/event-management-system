@@ -5,6 +5,7 @@ describe('ApproveRefundCommandHandler', () => {
     let mockRefundRepository: any;
     let mockBookingRepository: any;
     let mockTicketRepository: any;
+    let mockEventRepository: any;
     let mockNotificationService: any;
 
     const fakeRefund = () => ({
@@ -16,6 +17,9 @@ describe('ApproveRefundCommandHandler', () => {
 
     const fakeBooking = () => ({
         getId: () => 'booking-abc',
+        getEventId: () => 'event-1',
+        getTicketCategoryId: () => 'cat-1',
+        getQuantity: () => 2,
         markAsRefunded: jest.fn(),
     });
 
@@ -28,12 +32,22 @@ describe('ApproveRefundCommandHandler', () => {
         mockRefundRepository = { findById: jest.fn(), save: jest.fn() };
         mockBookingRepository = { findById: jest.fn(), save: jest.fn() };
         mockTicketRepository = { findByBookingId: jest.fn(), save: jest.fn() };
+        mockEventRepository = {
+            findById: jest.fn().mockResolvedValue({
+                getTicketCategories: () => [{
+                    id: 'cat-1',
+                    releaseTickets: jest.fn(),
+                }],
+            }),
+            save: jest.fn(),
+        };
         mockNotificationService = { sendRefundStatusUpdate: jest.fn() };
 
         handler = new ApproveRefundCommandHandler(
             mockRefundRepository,
             mockBookingRepository,
             mockTicketRepository,
+            mockEventRepository,
             mockNotificationService
         );
     });

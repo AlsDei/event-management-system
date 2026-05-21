@@ -3,9 +3,9 @@ export class Money {
         private readonly amount: number,
         private readonly currency: string = 'USD'
     ) {
-        // Acceptance Criteria: Price cannot be less than zero 
+        // Acceptance Criteria: Price cannot be negative 
         if (amount < 0) {
-            throw new Error("This must be greater than 0");
+            throw new Error("Amount cannot be negative.");
         }
     }
 

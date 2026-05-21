@@ -1,17 +1,12 @@
-import { Booking, BookingStatus } from '../aggregates/booking/booking.aggregate';
-import { TicketStatus } from '../aggregates/ticket/ticket.aggregate';
+import { Booking } from '../aggregates/booking/booking.aggregate';
 import { ITicketRepository } from '../repositories/ticket.repository';
 
 export class RefundEligibilityService {
-    constructor(private ticketRepository: ITicketRepository) { }
+    constructor(private readonly ticketRepository: ITicketRepository) { }
 
-    async canRequestRefund(booking: Booking, isEventCancelled: boolean): Promise<boolean> {
-        if (booking.getStatus() !== BookingStatus.Paid) return false;
-
-        if (isEventCancelled) return true; // AC: cancelled event always allows refund
-
+    async canRequestRefund(booking: Booking): Promise<boolean> {
         const tickets = await this.ticketRepository.findByBookingId(booking.getId());
-        const anyCheckedIn = tickets.some(t => t.getStatus() === TicketStatus.CheckedIn);
-        return !anyCheckedIn;
+        const hasCheckedInTickets = tickets.some(t => t.getStatus() === 'CheckedIn');
+        return !hasCheckedInTickets;
     }
 }

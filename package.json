@@ -21,13 +21,17 @@
   },
   "homepage": "https://github.com/AlsDei/event-management-system#readme",
   "dependencies": {
-    "@nestjs/cqrs": "^11.0.3"
+    "@nestjs/cqrs": "^11.0.3",
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@nestjs/testing": "^11.1.21",
+    "@types/crypto-js": "^4.2.2",
     "@types/jest": "^29.0.0",
-    "@types/node": "^25.9.0",
+    "@types/node": "^25.9.1",
+    "@types/uuid": "^10.0.0",
     "jest": "^29.7.0",
-    "ts-jest": "^29.0.0"
+    "ts-jest": "^29.0.0",
+    "typescript": "^6.0.3"
   }
 }

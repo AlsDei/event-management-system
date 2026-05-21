@@ -37,30 +37,33 @@ export class Refund {
 
     public approve(): void {
         if (this.status !== RefundStatus.Requested) {
-            throw new Error("Refund cannot be approved if not in Requested status.");[8]
+            throw new Error("Refund cannot be approved if not in Requested status.");
         }
         this.status = RefundStatus.Approved;
-        this.domainEvents.push(new RefundApproved(this.id.getValue(), this.bookingId, new Date()));[6, 8]
+        this.domainEvents.push(new RefundApproved(this.id.getValue(), this.bookingId, new Date()));
     }
 
     public reject(reason: string): void {
-        this.rejectionReason = new RejectionReason(reason);[9]
+        if (this.status !== RefundStatus.Requested) {
+            throw new Error("Refund cannot be rejected if not in Requested status.");
+        }
+        this.rejectionReason = new RejectionReason(reason);
         this.status = RefundStatus.Rejected;
-        this.domainEvents.push(new RefundRejected(this.id.getValue(), reason, new Date()));[6, 9]
+        this.domainEvents.push(new RefundRejected(this.id.getValue(), reason, new Date()));
     }
 
     public markAsPaidOut(paymentReference: string): void {
         if (this.status !== RefundStatus.Approved) {
-            throw new Error("Only approved refunds can be marked as paid out.");[10]
+            throw new Error("Only approved refunds can be marked as paid out.");
         }
         this.status = RefundStatus.PaidOut;
-        this.domainEvents.push(new RefundPaidOut(this.id.getValue(), paymentReference, new Date()));[6, 10]
+        this.domainEvents.push(new RefundPaidOut(this.id.getValue(), paymentReference, new Date()));
     }
 
     // Getters
     getId(): string { return this.id.getValue(); }
     getStatus(): RefundStatus { return this.status; }
+    getBookingId(): string { return this.bookingId; }
+    getAmount(): Money { return this.amount; }
     getRejectionReason(): string | undefined { return this.rejectionReason?.getValue(); }
-    public getBookingId(): string { return this.bookingId; }
-    public getAmount(): Money { return this.amount; }
 }

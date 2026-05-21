@@ -1,4 +1,4 @@
-import { MarkRefundPaidOutCommandHandler, MarkRefundPaidOutCommand } from '../commands/mark-refund-paid-out.comand';
+import { MarkRefundPaidOutCommandHandler, MarkRefundPaidOutCommand } from '../commands/mark-refund-paid-out.command';
 
 describe('MarkRefundPaidOutCommandHandler', () => {
     let handler: MarkRefundPaidOutCommandHandler;

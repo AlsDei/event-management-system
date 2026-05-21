@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { IEventRepository } from '../../../domain/repositories/event.repository';
-import { Event } from '../../../domain/aggregates/event/event.aggregate';
+import { IEventRepository } from '../../domain/repositories/event.repository';
+import { Event } from '../../domain/aggregates/event/event.aggregate';
 import { randomUUID } from 'crypto';
 
 // Command
@@ -13,13 +13,13 @@ export class CreateEventCommand {
     public readonly location: string,
     public readonly maxCapacity: number,
     public readonly organizerId: string,
-  ) {}
+  ) { }
 }
 
 // Handler
 @CommandHandler(CreateEventCommand)
 export class CreateEventHandler implements ICommandHandler<CreateEventCommand> {
-  constructor(private readonly eventRepository: IEventRepository) {}
+  constructor(private readonly eventRepository: IEventRepository) { }
 
   async execute(command: CreateEventCommand): Promise<string> {
     const eventId = randomUUID();

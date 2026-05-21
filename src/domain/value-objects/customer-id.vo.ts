@@ -1,11 +1,10 @@
-import { randomUUID } from 'crypto';
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 
 export class CustomerID {
     private readonly value: string;
-    private static readonly UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
     private constructor(value: string) {
-        if (!CustomerID.UUID_REGEX.test(value)) {
+        if(!uuidValidate(value)) {
             throw new Error("Invalid Customer ID: must be a valid UUID.");
         }
         this.value = value;
@@ -15,7 +14,7 @@ export class CustomerID {
         if (value) {
             return new CustomerID(value);
         } else {
-            return new CustomerID(randomUUID());
+            return new CustomerID(uuidv4());
         }
     }
 
@@ -29,5 +28,5 @@ export class CustomerID {
 
     toString(): string {
         return this.value;
-    }
+    } 
 }

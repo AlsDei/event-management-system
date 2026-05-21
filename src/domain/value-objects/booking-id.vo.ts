@@ -1,17 +1,16 @@
-import { randomUUID } from 'crypto';
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 
 export class BookingId {
     private readonly value: string;
-    private static readonly UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
     constructor(value?: string) {
         if (value !== undefined) {
-            if (!BookingId.UUID_REGEX.test(value)) {
+            if (!uuidValidate(value)) {
                 throw new Error("Invalid booking ID: must be a valid UUID.");
             }
             this.value = value;
         } else {
-            this.value = randomUUID();
+            this.value = uuidv4();
         }
     }
 

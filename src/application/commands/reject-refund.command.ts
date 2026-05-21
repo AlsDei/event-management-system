@@ -19,12 +19,10 @@ export class RejectRefundCommandHandler {
         const refund = await this.refundRepository.findById(command.refundId);
         if (!refund) throw new Error("Refund request not found.");
 
-        // Execute domain logic
         refund.reject(command.rejectionReason);
 
         await this.refundRepository.save(refund);
 
-        // Notify the customer
         await this.notificationService.sendRefundStatusUpdate(command.customerContact, {
             refundId: refund.getId(),
             status: 'Rejected',

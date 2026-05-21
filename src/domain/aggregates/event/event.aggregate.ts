@@ -46,7 +46,6 @@ export class Event {
         this.status = EventStatus.Draft;
         this.organizer = organizer;
 
-
         this.domainEvents.push(new EventCreated(id, name, new Date()));
     }
 
@@ -59,40 +58,39 @@ export class Event {
         }
 
         this.ticketCategories.push(category);
-        this.domainEvents.push(new TicketCategoryCreated(this.id.getValue(), category.id));
+        this.domainEvents.push(new TicketCategoryCreated(this.id.getValue(), category.id, new Date()));
     }
 
     public publish(): void {
-        if (this.ticketCategories.length === 0) {
-            throw new Error("An event must have at least one ticket category to be published.");[1]
+        const hasActiveCategory = this.ticketCategories.some(cat => cat.isActive());
+        if (!hasActiveCategory) {
+            throw new Error("An event must have at least one active ticket category to be published.");
         }
         if (this.status === EventStatus.Canceled) {
-            throw new Error("A cancelled event cannot be published.");[1]
+            throw new Error("A cancelled event cannot be published.");
         }
         this.status = EventStatus.Published;
-        this.domainEvents.push(new EventPublished(this.id.getValue(), new Date()));[1, 6]
+        this.domainEvents.push(new EventPublished(this.id.getValue(), new Date()));
     }
 
     public cancel(): void {
         if (this.status === EventStatus.Completed) {
-            throw new Error("A completed event cannot be cancelled.");[2]
+            throw new Error("A completed event cannot be cancelled.");
         }
         this.status = EventStatus.Canceled;
-        // Business Rule: Disable all categories when cancelled [2]
+        // Business Rule: Disable all categories when cancelled
         this.ticketCategories.forEach(cat => cat.disable());
-        this.domainEvents.push(new EventCancelled(this.id.getValue(), new Date()));[2, 6]
+        this.domainEvents.push(new EventCancelled(this.id.getValue(), new Date()));
     }
 
     getId(): string { return this.id.getValue(); }
     getName(): string { return this.name; }
     getDescription(): string { return this.description; }
-    getSchedule(): EventSchedule { return this.schedule; }
     getLocation(): string { return this.location; }
+    getSchedule(): EventSchedule { return this.schedule; }
     getOrganizer(): string { return this.organizer; }
-    getMaxCapacity(): number { return this.maxCapacity.Value; }
     getStatus(): EventStatus { return this.status; }
-    getTicketCategories(): TicketCategory[] { return [...this.ticketCategories]; }
+    getTicketCategories(): TicketCategory[] { return this.ticketCategories; }
     getEvents() { return this.domainEvents; }
 
 }
-

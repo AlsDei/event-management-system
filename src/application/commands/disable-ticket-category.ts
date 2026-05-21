@@ -1,18 +1,18 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { IEventRepository } from '../../../domain/repositories/event.repository';
+import { IEventRepository } from '../../domain/repositories/event.repository';
 
 // Command
 export class DisableTicketCategoryCommand {
   constructor(
     public readonly eventId: string,
     public readonly ticketCategoryId: string,
-  ) {}
+  ) { }
 }
 
 // Handler
 @CommandHandler(DisableTicketCategoryCommand)
 export class DisableTicketCategoryHandler implements ICommandHandler<DisableTicketCategoryCommand> {
-  constructor(private readonly eventRepository: IEventRepository) {}
+  constructor(private readonly eventRepository: IEventRepository) { }
 
   async execute(command: DisableTicketCategoryCommand): Promise<void> {
     const event = await this.eventRepository.findById(command.eventId);

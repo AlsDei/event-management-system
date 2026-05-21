@@ -35,7 +35,7 @@ describe('TicketCategory Entity', () => {
                 validSalesPeriod,
                 'cat-123',
             );
-        }).toThrow("This must be greater than 0");
+        }).toThrow("Amount cannot be negative.");
     });
 
     it('should successfully create a TicketCategory with a valid price and quota', () => {

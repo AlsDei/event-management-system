@@ -8,7 +8,8 @@ export enum BookingStatus {
     PendingPayment = 'PendingPayment',
     Paid = 'Paid',
     Expired = 'Expired',
-    Refunded = 'Refunded'
+    Refunded = 'Refunded',
+    RequiresRefund = 'RequiresRefund'
 }
 
 export class Booking {
@@ -48,13 +49,7 @@ export class Booking {
         // Acceptance Criteria US 8: 15-minute payment deadline
         this.paymentDeadline = new Date(Date.now() + 15 * 60 * 1000);
 
-
-
         this.domainEvents.push(new TicketReserved(this.id.getValue(), this.eventId, new Date(), this.ticketCategoryId, this.quantity));
-    }
-
-    public getQuantity(): number {
-        return this.quantity;
     }
 
     // Business Logic: US 10 - Pay Booking 
@@ -78,22 +73,35 @@ export class Booking {
 
     // Business Logic: US 11 - Expire Booking
     public expire(): void {
-        if (this.status === BookingStatus.Paid) {
-            throw new Error("A paid booking cannot expire.");
+        if (this.status !== BookingStatus.PendingPayment) {
+            throw new Error("Only pending bookings can be expired. A paid booking cannot expire.");
         }
 
         this.status = BookingStatus.Expired;
         this.domainEvents.push(new BookingExpired(this.id.getValue(), new Date(), this.eventId, this.ticketCategoryId, this.quantity));
     }
 
-    // Getters
-    getId(): string { return this.id.getValue(); }
-    getStatus(): BookingStatus { return this.status; }
-    getTotalPrice(): Money { return this.totalPrice; }
-    getEvents() { return this.domainEvents; }
-    getPaymentDeadline(): Date { return this.paymentDeadline; }
-    getEventId(): string { return this.eventId; }
-    markAsRefunded(): void {
+    // Business Logic: Mark booking as refunded (called by ApproveRefundCommand)
+    public markAsRefunded(): void {
         this.status = BookingStatus.Refunded;
     }
+
+    // Business Logic: Mark booking as requiring refund (called when event is cancelled, US 3)
+    public markAsRequiresRefund(): void {
+        if (this.status !== BookingStatus.Paid) {
+            throw new Error("Only paid bookings can be marked as requiring a refund.");
+        }
+        this.status = BookingStatus.RequiresRefund;
+    }
+
+    // Getters
+    getId(): string { return this.id.getValue(); }
+    getCustomerId(): string { return this.customerId; }
+    getStatus(): BookingStatus { return this.status; }
+    getTotalPrice(): Money { return this.totalPrice; }
+    getQuantity(): number { return this.quantity; }
+    getEventId(): string { return this.eventId; }
+    getTicketCategoryId(): string { return this.ticketCategoryId; }
+    getPaymentDeadline(): Date { return this.paymentDeadline; }
+    getEvents() { return this.domainEvents; }
 }

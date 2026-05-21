@@ -1,5 +1,6 @@
 import { TicketCode } from '../../value-objects/ticket-id.vo';
 import { TicketCheckedIn } from '../../events/ticket-checked-in.event';
+import { TicketCancelled } from '../../events/ticket-cancelled.event';
 import { EventId } from '../../value-objects/event-id.vo';
 
 export enum TicketStatus {
@@ -9,13 +10,15 @@ export enum TicketStatus {
 }
 
 export class Ticket {
+    private id: string;
     private ticketCode: TicketCode;
     private bookingId: string;
     private eventId: EventId;
     private status: TicketStatus;
     private domainEvents: any[] = [];
 
-    constructor(code: string, bookingId: string, eventId: EventId) {
+    constructor(id: string, code: string, bookingId: string, eventId: EventId) {
+        this.id = id;
         this.ticketCode = new TicketCode(code);
         this.bookingId = bookingId;
         this.eventId = eventId;
@@ -41,14 +44,26 @@ export class Ticket {
 
         // Update status and raise event
         this.status = TicketStatus.CheckedIn;
-        this.domainEvents.push(new TicketCheckedIn(this.bookingId, this.ticketCode.getValue(), new Date()));
+        this.domainEvents.push(new TicketCheckedIn(this.id, this.ticketCode.getValue(), new Date()));
+    }
+
+    // Called by ApproveRefundCommand when a refund is approved
+    public cancel(): void {
+        if (this.status === TicketStatus.CheckedIn) {
+            throw new Error("A ticket that has already been checked in cannot be cancelled.");
+        }
+
+        if (this.status === TicketStatus.Cancelled) {
+            throw new Error("This ticket is already cancelled.");
+        }
+
+        this.status = TicketStatus.Cancelled;
+        this.domainEvents.push(new TicketCancelled(this.id, this.bookingId, new Date()));
     }
 
     // Getters
+    getId(): string { return this.id; }
     getStatus(): TicketStatus { return this.status; }
     getCode(): string { return this.ticketCode.getValue(); }
     getEvents() { return this.domainEvents; }
-    cancel(): void {
-        this.status = TicketStatus.Cancelled;
-    }
 }

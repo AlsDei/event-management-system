@@ -27,7 +27,7 @@ describe('Event Aggregate', () => {
     // Test Case 3: Publish without Categories
     it('should not allow publishing an event without at least one ticket category', () => {
         const event = new Event("Concert", "Desc", new Date(), new Date(), "Venue", 100, "11111111-2222-4333-8444-555555555555", "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee");
-        expect(() => event.publish()).toThrow("An event must have at least one ticket category to be published.");
+        expect(() => event.publish()).toThrow("An event must have at least one active ticket category to be published.");
     });
 
     // Test Case 4: Quota vs Capacity

@@ -19,8 +19,6 @@ export class MarkRefundPaidOutCommandHandler {
             throw new Error("Only approved refunds can be paid out.");
         }
 
-        // 1. Process the physical bank transfer via SPI
-        // (Note: you will need a getAmount() method on your Refund aggregate)
         const bankResult = await this.bankService.processRefundTransfer(refund.getId(), {
             amount: refund.getAmount().getAmount(),
             currency: refund.getAmount().getCurrency()
@@ -30,10 +28,8 @@ export class MarkRefundPaidOutCommandHandler {
             throw new Error("Bank transfer failed. Please try again.");
         }
 
-        // 2. Finalize the Refund aggregate with the receipt string
         refund.markAsPaidOut(bankResult.bankReference);
 
-        // 3. Save the final state
         await this.refundRepository.save(refund);
     }
 }

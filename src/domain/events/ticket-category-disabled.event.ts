@@ -1,6 +1,5 @@
-export class TicketCategoryCreated {
+export class TicketCategoryDisabled {
     constructor(
-        public readonly eventId: string,
         public readonly categoryId: string,
         public readonly occurredAt: Date
     ) { }

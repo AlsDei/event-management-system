@@ -16,6 +16,7 @@ describe('Ticket and Refund Logic', () => {
         const ticket = new Ticket(
             "11111111-2222-4333-8444-555555555555",
             "11111111-2222-4333-8444-555555555555",
+            "11111111-2222-4333-8444-555555555556",
             sampleEventId
         );
 
@@ -27,11 +28,11 @@ describe('Ticket and Refund Logic', () => {
 
     // Test Case 10: Refund & Check-in (Service Test)
     it('should not allow a refund request if a ticket has already been checked in', async () => {
-        const mockRepo = { findByBookingId: jest.fn().mockResolvedValue([{ status: 'CheckedIn' }]) };
+        const mockRepo = { findByBookingId: jest.fn().mockResolvedValue([{ getStatus: () => 'CheckedIn' }]) };
         const service = new RefundEligibilityService(mockRepo as any);
         const booking = new Booking("cust-1", "event-1", "cat-1", 1, moneyVO);
 
-        const isEligible = await service.canRequestRefund(booking, false);
+        const isEligible = await service.canRequestRefund(booking);
         expect(isEligible).toBe(false);
     });
 

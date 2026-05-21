@@ -1,6 +1,7 @@
 import { IRefundRepository } from '../../domain/repositories/refund.repository';
 import { IBookingRepository } from '../../domain/repositories/booking.repository';
 import { ITicketRepository } from '../../domain/repositories/ticket.repository';
+import { IEventRepository } from '../../domain/repositories/event.repository';
 import { INotificationService } from '../interfaces/notification-service.interface';
 
 export class ApproveRefundCommand {
@@ -15,6 +16,7 @@ export class ApproveRefundCommandHandler {
         private readonly refundRepository: IRefundRepository,
         private readonly bookingRepository: IBookingRepository,
         private readonly ticketRepository: ITicketRepository,
+        private readonly eventRepository: IEventRepository,
         private readonly notificationService: INotificationService
     ) { }
 
@@ -27,6 +29,19 @@ export class ApproveRefundCommandHandler {
         const booking = await this.bookingRepository.findById(refund.getBookingId());
         if (booking) {
             booking.markAsRefunded();
+
+            // Release the reserved quota back to the ticket category
+            const event = await this.eventRepository.findById(booking.getEventId());
+            if (event) {
+                const category = event.getTicketCategories().find(
+                    cat => cat.id === booking.getTicketCategoryId()
+                );
+                if (category) {
+                    category.releaseTickets(booking.getQuantity());
+                    await this.eventRepository.save(event);
+                }
+            }
+
             await this.bookingRepository.save(booking);
         }
 
